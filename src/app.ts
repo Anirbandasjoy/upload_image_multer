@@ -1,11 +1,12 @@
 import express, {
+  Application,
   ErrorRequestHandler,
   NextFunction,
   Request,
   Response,
 } from "express";
 
-const app = express();
+const app: Application = express();
 import cors from "cors";
 import createHttpError from "http-errors";
 import {
@@ -13,6 +14,7 @@ import {
   successResponse,
 } from "./controller/response.controller";
 import imageUploadRouter from "./routes/imageupload.router";
+import path from "path";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,6 +23,7 @@ app.use(
     origin: "*",
   })
 );
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/v1/image", imageUploadRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
